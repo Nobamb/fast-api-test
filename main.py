@@ -1,5 +1,6 @@
 import asyncio
 import time
+# import uvloop
 
 # 3개의 비동기 작업을 정의해 볼게 (네트워크 요청이라고 상상해 봐)
 async def worker(name, delay_time):
@@ -35,7 +36,8 @@ if __name__ == "__main__":
     
     # 2. 만약 uvloop(Uvicorn 엔진)로 실행하고 싶다면 위 코드 대신 이렇게 써:
     # import uvloop
-    # uvloop.install()  <-- "지금부터 기본 엔진 빼고 페라리 엔진으로 교체해!" 라는 뜻
+    # "지금부터 기본 엔진 빼고 페라리 엔진으로 교체해!" 라는 뜻
+    # uvloop.install()  
     # asyncio.run(main())
     
     print(f"총 걸린 시간: {time.time() - start_time:.2f}초")
