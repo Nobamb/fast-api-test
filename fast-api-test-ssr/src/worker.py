@@ -6,7 +6,7 @@ from workers import WorkerEntrypoint
 
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # 프론트엔드에서 날아올 JSON 데이터의 구조(뼈대)를 파이썬 클래스로 정의해!
 class ScoreData(BaseModel):
