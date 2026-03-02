@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>명예의 전당</title>
+</head>
+<body>
+    <h1>랭킹 등록 (AJAX 버전)</h1>
+    
+    <form id="scoreForm">
+        <label>플레이어 닉네임:</label>
+        <input type="text" id="playerName" required>
+        <br><br>
+        
+        <label>점수:</label>
+        <input type="number" id="chickenCount" required>
+        <br><br>
+        
+        <button type="submit">서버로 점수 쏘기! (AJAX)</button>
+    </form>
+
+    <hr>
+
+    <h2>🎉 랭킹 등록 결과:</h2>
+    <p id="resultArea" style="color: blue; font-weight: bold;">아직 등록된 랭킹이 없습니다.</p>
+
+    <script>
+        const form = document.getElementById('scoreForm');
+        const resultArea = document.getElementById('resultArea');
+
+        form.addEventListener('submit', function(e) {
+            // 1. 브라우저의 멍청한 새로고침(폼 제출) 본능을 막는다!
+            e.preventDefault();
+
+            // 2. input 태그에서 유저가 입력한 값을 가져온다.
+            const name = document.getElementById('playerName').value;
+            const count = document.getElementById('chickenCount').value;
+
+            // 3. 네가 말했던 완벽한 fetch 통신 시작!
+            fetch('/submit-score', {
+                method: 'POST',
+                headers: {
+                    // "서버야, 내가 지금 보내는 건 단순 텍스트가 아니라 JSON 형태야!"
+                    'Content-Type': 'application/json' 
+                },
+                // 데이터를 JSON 문자열로 예쁘게 포장해서 보냄
+                body: JSON.stringify({
+                    player_name: name,
+                    chicken_count: parseInt(count)
+                })
+            })
+            .then(res => res.json()) // 4. 파이썬 서버가 보낸 응답을 JSON으로 변환
+            .then(data => {
+                // 5. 서버가 보내준 데이터로 HTML 화면만 살짝 업데이트!
+                if(data.status === "success") {
+                    resultArea.innerText = data.result_message;
+                    resultArea.style.color = "green";
+                }
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+            });
+        });
+    </script>
+</body>
+</html>
